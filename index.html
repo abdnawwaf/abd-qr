@@ -1,212 +1,779 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>Abd QR</title>
-        <style>
-            body {
-                  font-family: sans-serif;
-                        background-color: #f0f0f0;
-                              color: #222;
-                                    margin: 0;
-                                          padding: 0;
-                                                transition: background-color 0.3s, color 0.3s;
-                                                    }
-                                                        .dark-theme {
-                                                              background-color: #121212;
-                                                                    color: #fff;
-                                                                        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>abd-qr</title>
+    
+    <!-- Favicon (will be dynamically changed) -->
+    <link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔳</text></svg>">
 
-                                                                            header {
-                                                                                  display: flex;
-                                                                                        justify-content: space-between;
-                                                                                              align-items: center;
-                                                                                                    padding: 15px 20px;
-                                                                                                          background-color: #007bff;
-                                                                                                                color: #fff;
-                                                                                                                    }
-                                                                                                                        header h1 {
-                                                                                                                              cursor: pointer;
-                                                                                                                                    margin: 0;
-                                                                                                                                          font-size: 22px;
-                                                                                                                                              }
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-                                                                                                                                                  .toggle-container {
-                                                                                                                                                        position: relative;
-                                                                                                                                                            }
-                                                                                                                                                                .switch {
-                                                                                                                                                                      position: relative;
-                                                                                                                                                                            display: inline-block;
-                                                                                                                                                                                  width: 50px;
-                                                                                                                                                                                        height: 26px;
-                                                                                                                                                                                            }
-                                                                                                                                                                                                .switch input {
-                                                                                                                                                                                                      opacity: 0;
-                                                                                                                                                                                                            width: 0;
-                                                                                                                                                                                                                  height: 0;
-                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                          .slider {
-                                                                                                                                                                                                                                position: absolute;
-                                                                                                                                                                                                                                      cursor: pointer;
-                                                                                                                                                                                                                                            top: 0; left: 0;
-                                                                                                                                                                                                                                                  right: 0; bottom: 0;
-                                                                                                                                                                                                                                                        background-color: #ccc;
-                                                                                                                                                                                                                                                              transition: 0.4s;
-                                                                                                                                                                                                                                                                    border-radius: 30px;
-                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                            .slider:before {
-                                                                                                                                                                                                                                                                                  position: absolute;
-                                                                                                                                                                                                                                                                                        content: "";
-                                                                                                                                                                                                                                                                                              height: 20px; width: 20px;
-                                                                                                                                                                                                                                                                                                    left: 3px; bottom: 3px;
-                                                                                                                                                                                                                                                                                                          background-color: white;
-                                                                                                                                                                                                                                                                                                                transition: 0.4s;
-                                                                                                                                                                                                                                                                                                                      border-radius: 50%;
-                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                              input:checked + .slider {
-                                                                                                                                                                                                                                                                                                                                    background-color: #2196F3;
-                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                            input:checked + .slider:before {
-                                                                                                                                                                                                                                                                                                                                                  transform: translateX(24px);
-                                                                                                                                                                                                                                                                                                                                                      }
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-                                                                                                                                                                                                                                                                                                                                                          main {
-                                                                                                                                                                                                                                                                                                                                                                max-width: 500px;
-                                                                                                                                                                                                                                                                                                                                                                      margin: 40px auto;
-                                                                                                                                                                                                                                                                                                                                                                            padding: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                  background: #fff;
-                                                                                                                                                                                                                                                                                                                                                                                        border-radius: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                              box-shadow: 0 0 20px rgba(0,0,0,0.1);
-                                                                                                                                                                                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                                                                                                                                                                                      .dark-theme main {
-                                                                                                                                                                                                                                                                                                                                                                                                            background: #1e1e1e;
-                                                                                                                                                                                                                                                                                                                                                                                                                }
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                    .input-group {
-                                                                                                                                                                                                                                                                                                                                                                                                                          margin-bottom: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                                              }
-                                                                                                                                                                                                                                                                                                                                                                                                                                  input[type="text"], input[type="color"] {
-                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                              padding: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin-top: 5px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          font-size: 16px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                border: 1px solid #ccc;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                      border-radius: 6px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-sizing: border-box;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    button {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          padding: 10px 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                font-size: 16px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      margin-right: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-top: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  border: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        background-color: #007bff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              color: white;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    border-radius: 6px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          cursor: pointer;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                transition: 0.3s;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        button:hover {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              background-color: #0056b3;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      #qr-code {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-top: 20px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  text-align: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          canvas {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                margin: 0 auto;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      display: block;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </style>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </head>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <header>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <h1 onclick="location.reload()">Abd QR</h1>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="toggle-container">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="switch">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <input type="checkbox" id="themeToggle">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <span class="slider"></span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </header>
+    <!-- QR Code Generation Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <main>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <div class="input-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <label for="qrText">Text or URL</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <input type="text" id="qrText" placeholder="Enter text or link" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+    <!-- QR Code Scanning Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <div class="input-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <label for="fgColor">Foreground Color</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <input type="color" id="fgColor" value="#000000" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div>
+    <!-- OCR Library -->
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div class="input-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label for="bgColor">Background Color</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <input type="color" id="bgColor" value="#ffffff" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+    <style>
+        /* Custom Styles */
+        :root {
+            --bg-light: #f8fafc; /* slate-50 */
+            --bg-dark: #0f172a;  /* slate-900 */
+            --card-light: #ffffff;
+            --card-dark: #1e293b; /* slate-800 */
+            --text-light: #0f172a;
+            --text-dark: #e2e8f0; /* slate-200 */
+            --border-light: #e2e8f0; /* slate-200 */
+            --border-dark: #334155; /* slate-700 */
+            --primary-light: #4f46e5; /* indigo-600 */
+            --primary-dark: #818cf8; /* indigo-400 */
+            --input-bg-light: #f1f5f9; /* slate-100 */
+            --input-bg-dark: #334155; /* slate-700 */
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <button onclick="generateQRCode()">Generate QR</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <button onclick="downloadQR('png')">Download PNG</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <button onclick="downloadQR('jpg')">Download JPG</button>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <div id="qr-code"></div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </main>
+        /* Light Mode */
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const themeToggle = document.getElementById("themeToggle");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    const qrText = document.getElementById("qrText");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const fgColor = document.getElementById("fgColor");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const bgColor = document.getElementById("bgColor");
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        
+        .card {
+            background-color: var(--card-light);
+            border: 1px solid var(--border-light);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                // Load theme from storage
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    if (localStorage.getItem("theme") === "dark") {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          document.body.classList.add("dark-theme");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                themeToggle.checked = true;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+        body.dark-mode .card {
+            background-color: var(--card-dark);
+            border-color: var(--border-dark);
+        }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        themeToggle.addEventListener("change", () => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              const isDark = themeToggle.checked;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    document.body.classList.toggle("dark-theme", isDark);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          localStorage.setItem("theme", isDark ? "dark" : "light");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              });
+        .form-input, .form-select {
+            background-color: var(--input-bg-light);
+            border: 1px solid var(--border-light);
+            color: var(--text-light);
+        }
+        
+        body.dark-mode .form-input, body.dark-mode .form-select {
+            background-color: var(--input-bg-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+        
+        .form-input::placeholder { color: #94a3b8; }
+        body.dark-mode .form-input::placeholder { color: #64748b; }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  function generateQRCode() {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const qrContainer = document.getElementById("qr-code");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              qrContainer.innerHTML = "";
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    new QRCode(qrContainer, {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            text: qrText.value,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: 256,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            height: 256,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    colorDark: fgColor.value,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            colorLight: bgColor.value,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    correctLevel: QRCode.CorrectLevel.H
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          });
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+        .btn-primary {
+            background-color: var(--primary-light);
+            color: white;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover { background-color: #4338ca; }
+        body.dark-mode .btn-primary { background-color: var(--primary-dark); color: var(--bg-dark); }
+        body.dark-mode .btn-primary:hover { background-color: #6366f1; }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  function downloadQR(type) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const canvas = document.querySelector("#qr-code canvas");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              if (!canvas) return alert("Generate QR first!");
+        .tab-btn {
+            color: #64748b;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-btn.active {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-light);
+        }
+        body.dark-mode .tab-btn.active {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary-dark);
+        }
+        
+        /* Theme Toggle Switch */
+        .theme-switch-wrapper { display: flex; align-items: center; }
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 48px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #cbd5e1; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 24px; }
+        .slider:before { background-color: #fff; bottom: 4px; content: ""; height: 16px; left: 4px; position: absolute; transition: .4s; width: 16px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-dark); }
+        input:checked + .slider:before { transform: translateX(24px); }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    const link = document.createElement("a");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          if (type === 'png') {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  link.href = canvas.toDataURL("image/png");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          link.download = "qr-code.png";
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } else if (type === 'jpg') {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const jpgCanvas = document.createElement("canvas");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                jpgCanvas.width = canvas.width;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        jpgCanvas.height = canvas.height;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const ctx = jpgCanvas.getContext("2d");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ctx.fillStyle = "#ffffff"; // white bg
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ctx.fillRect(0, 0, jpgCanvas.width, jpgCanvas.height);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ctx.drawImage(canvas, 0, 0);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                link.href = jpgCanvas.toDataURL("image/jpeg");
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        link.download = "qr-code.jpg";
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    link.click();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </html>
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+        #qr-code-container { min-height: 256px; }
+        #scanner-video { max-width: 100%; border-radius: 0.5rem; }
+        #scan-result, #ocr-result, #website-result { word-break: break-all; }
+        
+        /* Hide scrollbar for scanner result */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
+                abd-qr
+            </h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </header>
+
+        <main>
+            <!-- Main Tabs -->
+            <div class="mb-6 border-b border-slate-200 dark:border-slate-700">
+                <nav class="flex -mb-px space-x-6">
+                    <button id="tab-generate-btn" class="tab-btn py-3 px-1 font-medium text-lg active">
+                        <i class="fa-solid fa-qrcode mr-2"></i>Generate
+                    </button>
+                    <button id="tab-scan-btn" class="tab-btn py-3 px-1 font-medium text-lg">
+                        <i class="fa-solid fa-camera mr-2"></i>Scan
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Generate Panel -->
+            <div id="generate-panel" class="fade-in">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left: Inputs -->
+                    <div>
+                        <div class="card p-6 rounded-xl shadow-sm">
+                            <!-- QR Type Tabs -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button data-type="text" class="qr-type-btn bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-sm font-medium px-3 py-1 rounded-full">Text</button>
+                                <button data-type="url" class="qr-type-btn text-sm font-medium px-3 py-1 rounded-full">URL</button>
+                                <button data-type="wifi" class="qr-type-btn text-sm font-medium px-3 py-1 rounded-full">Wi-Fi</button>
+                                <button data-type="vcard" class="qr-type-btn text-sm font-medium px-3 py-1 rounded-full">vCard</button>
+                                <button data-type="email" class="qr-type-btn text-sm font-medium px-3 py-1 rounded-full">Email</button>
+                                <button data-type="phone" class="qr-type-btn text-sm font-medium px-3 py-1 rounded-full">Phone</button>
+                            </div>
+                            
+                            <!-- Input Sections -->
+                            <div id="input-container">
+                                <!-- Text -->
+                                <div id="input-text" class="space-y-4">
+                                    <label for="text-input" class="font-medium">Your Text</label>
+                                    <textarea id="text-input" class="form-input w-full rounded-lg p-2" rows="4" placeholder="Enter any text..."></textarea>
+                                </div>
+                                <!-- URL -->
+                                <div id="input-url" class="space-y-4 hidden">
+                                    <label for="url-input" class="font-medium">Website URL</label>
+                                    <input type="url" id="url-input" class="form-input w-full rounded-lg p-2" placeholder="https://example.com">
+                                </div>
+                                <!-- Wi-Fi -->
+                                <div id="input-wifi" class="space-y-4 hidden">
+                                    <label for="wifi-ssid" class="font-medium">Network Name (SSID)</label>
+                                    <input type="text" id="wifi-ssid" class="form-input w-full rounded-lg p-2" placeholder="MyHomeNetwork">
+                                    <label for="wifi-password" class="font-medium">Password</label>
+                                    <input type="password" id="wifi-password" class="form-input w-full rounded-lg p-2" placeholder="••••••••">
+                                    <label for="wifi-encryption" class="font-medium">Encryption</label>
+                                    <select id="wifi-encryption" class="form-select w-full rounded-lg p-2">
+                                        <option value="WPA">WPA/WPA2</option>
+                                        <option value="WEP">WEP</option>
+                                        <option value="nopass">None</option>
+                                    </select>
+                                </div>
+                                <!-- vCard -->
+                                <div id="input-vcard" class="space-y-4 hidden">
+                                    <label for="vcard-name" class="font-medium">Full Name</label>
+                                    <input type="text" id="vcard-name" class="form-input w-full rounded-lg p-2" placeholder="John Doe">
+                                    <label for="vcard-email" class="font-medium">Email</label>
+                                    <input type="email" id="vcard-email" class="form-input w-full rounded-lg p-2" placeholder="john.doe@example.com">
+                                    <label for="vcard-phone" class="font-medium">Phone</label>
+                                    <input type="tel" id="vcard-phone" class="form-input w-full rounded-lg p-2" placeholder="+11234567890">
+                                    <label for="vcard-website" class="font-medium">Website (Optional)</label>
+                                    <input type="url" id="vcard-website" class="form-input w-full rounded-lg p-2" placeholder="https://johndoe.com">
+                                </div>
+                                <!-- Email -->
+                                <div id="input-email" class="space-y-4 hidden">
+                                    <label for="email-address" class="font-medium">Email Address</label>
+                                    <input type="email" id="email-address" class="form-input w-full rounded-lg p-2" placeholder="recipient@example.com">
+                                    <label for="email-subject" class="font-medium">Subject (Optional)</label>
+                                    <input type="text" id="email-subject" class="form-input w-full rounded-lg p-2" placeholder="Inquiry">
+                                </div>
+                                <!-- Phone -->
+                                <div id="input-phone" class="space-y-4 hidden">
+                                    <label for="phone-number" class="font-medium">Phone Number</label>
+                                    <input type="tel" id="phone-number" class="form-input w-full rounded-lg p-2" placeholder="+11234567890">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customization -->
+                        <div class="card p-6 rounded-xl shadow-sm mt-6">
+                            <h3 class="font-bold text-lg mb-4">Customize</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="qr-color" class="font-medium">QR Color</label>
+                                    <input type="color" id="qr-color" value="#0f172a" class="w-full h-10 rounded-lg p-1 border border-slate-200 dark:border-slate-700">
+                                </div>
+                                <div>
+                                    <label for="bg-color" class="font-medium">Background</label>
+                                    <input type="color" id="bg-color" value="#ffffff" class="w-full h-10 rounded-lg p-1 border border-slate-200 dark:border-slate-700">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="logo-upload" class="font-medium">Center Logo (Optional)</label>
+                                <input type="file" id="logo-upload" accept="image/*" class="form-input w-full text-sm p-2 rounded-lg file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 dark:file:bg-indigo-900 dark:file:text-indigo-300 hover:file:bg-indigo-200">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: QR Code Output -->
+                    <div class="flex flex-col items-center">
+                        <div id="qr-code-container" class="card p-6 rounded-xl shadow-sm w-full flex justify-center items-center bg-slate-100 dark:bg-slate-800/50">
+                            <div id="qr-code" class="flex justify-center items-center"></div>
+                            <p id="qr-placeholder" class="text-slate-400 dark:text-slate-500 text-center">Your QR code will appear here</p>
+                        </div>
+                        <button id="generate-btn" class="btn-primary w-full py-3 mt-6 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-shadow">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generate QR Code
+                        </button>
+                        <div id="download-section" class="w-full mt-4 hidden">
+                            <input type="text" id="filename-input" class="form-input w-full rounded-lg p-2 mb-2" placeholder="Enter filename (e.g., my-qr-code)">
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <button id="download-png-btn" class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white w-full py-2 rounded-lg font-semibold transition-colors">
+                                    <i class="fa-solid fa-file-image mr-2"></i>Download PNG
+                                </button>
+                                <button id="download-jpg-btn" class="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white w-full py-2 rounded-lg font-semibold transition-colors">
+                                    <i class="fa-solid fa-file-image mr-2"></i>Download JPG
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scan Panel -->
+            <div id="scan-panel" class="hidden fade-in">
+                <div class="card p-6 rounded-xl shadow-sm">
+                    <!-- Scan Type Tabs -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button data-scantype="webcam" class="scan-type-btn bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-sm font-medium px-3 py-1 rounded-full">Webcam</button>
+                        <button data-scantype="image" class="scan-type-btn text-sm font-medium px-3 py-1 rounded-full">Image File</button>
+                        <button data-scantype="ocr" class="scan-type-btn text-sm font-medium px-3 py-1 rounded-full">OCR Scanner</button>
+                        <button data-scantype="website" class="scan-type-btn text-sm font-medium px-3 py-1 rounded-full">Website</button>
+                    </div>
+
+                    <!-- Scan Content -->
+                    <div id="scan-container">
+                        <!-- Webcam -->
+                        <div id="scan-webcam">
+                            <video id="scanner-video" playsinline class="w-full h-auto rounded-lg mb-4"></video>
+                            <canvas id="scanner-canvas" class="hidden"></canvas>
+                            <button id="start-scan-btn" class="btn-primary w-full py-2 rounded-lg font-semibold">Start Camera</button>
+                            <p id="webcam-status" class="text-center mt-2 text-sm text-slate-500"></p>
+                        </div>
+                        <!-- Image Upload -->
+                        <div id="scan-image" class="hidden">
+                            <label for="scan-image-upload" class="font-medium">Upload QR Code Image</label>
+                            <input type="file" id="scan-image-upload" accept="image/*" class="form-input w-full text-sm p-2 rounded-lg mt-2 file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 dark:file:bg-indigo-900 dark:file:text-indigo-300 hover:file:bg-indigo-200">
+                        </div>
+                        <!-- OCR -->
+                        <div id="scan-ocr" class="hidden">
+                            <label for="ocr-image-upload" class="font-medium">Upload Image for Text Extraction</label>
+                            <input type="file" id="ocr-image-upload" accept="image/*" class="form-input w-full text-sm p-2 rounded-lg mt-2 file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 dark:file:bg-indigo-900 dark:file:text-indigo-300 hover:file:bg-indigo-200">
+                            <p id="ocr-status" class="text-center mt-2 text-sm text-slate-500"></p>
+                        </div>
+                        <!-- Website -->
+                        <div id="scan-website" class="hidden">
+                             <label for="website-url-input" class="font-medium">Enter URL to Preview</label>
+                             <div class="flex gap-2 mt-2">
+                                <input type="url" id="website-url-input" class="form-input w-full rounded-lg p-2" placeholder="https://example.com">
+                                <button id="website-scan-btn" class="btn-primary px-4 rounded-lg font-semibold">Fetch</button>
+                             </div>
+                             <p id="website-status" class="text-center mt-2 text-sm text-slate-500"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Scan Result -->
+                    <div id="result-container" class="mt-6 hidden">
+                        <h3 class="font-bold text-lg mb-2">Result</h3>
+                        <div id="scan-result-wrapper" class="card p-4 rounded-lg max-h-60 overflow-y-auto no-scrollbar bg-slate-100 dark:bg-slate-900">
+                            <!-- General Scan/OCR Result -->
+                            <pre id="scan-result" class="text-sm whitespace-pre-wrap"></pre>
+                            <!-- Website Metadata Result -->
+                            <div id="website-result" class="hidden"></div>
+                            <!-- vCard Result -->
+                            <div id="vcard-result" class="hidden space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 text-slate-500 dark:text-slate-400">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://github.com/abdnawwaf" target="_blank" class="hover:text-indigo-500 transition-colors"><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://linkedin.com/in/abdnawwaf" target="_blank" class="hover:text-indigo-500 transition-colors"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="https://instagram.com/abdnawwaf" target="_blank" class="hover:text-indigo-500 transition-colors"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="https://facebook.com/abdnawwaf" target="_blank" class="hover:text-indigo-500 transition-colors"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="https://medium.com/@abdnawwaf" target="_blank" class="hover:text-indigo-500 transition-colors"><i class="fab fa-medium fa-lg"></i></a>
+                <a href="mailto:abdnawwaf@example.com" class="hover:text-indigo-500 transition-colors"><i class="fas fa-envelope fa-lg"></i></a>
+            </div>
+            <p class="text-sm">&copy; abd-qr 2025</p>
+        </footer>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Elements ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const favicon = document.getElementById('favicon');
+    const tabGenerateBtn = document.getElementById('tab-generate-btn');
+    const tabScanBtn = document.getElementById('tab-scan-btn');
+    const generatePanel = document.getElementById('generate-panel');
+    const scanPanel = document.getElementById('scan-panel');
+    const qrTypeBtns = document.querySelectorAll('.qr-type-btn');
+    const inputContainer = document.getElementById('input-container');
+    const generateBtn = document.getElementById('generate-btn');
+    const qrCodeContainer = document.getElementById('qr-code');
+    const qrPlaceholder = document.getElementById('qr-placeholder');
+    const downloadSection = document.getElementById('download-section');
+    const filenameInput = document.getElementById('filename-input');
+    const downloadPngBtn = document.getElementById('download-png-btn');
+    const downloadJpgBtn = document.getElementById('download-jpg-btn');
+    const logoUpload = document.getElementById('logo-upload');
+    
+    const scanTypeBtns = document.querySelectorAll('.scan-type-btn');
+    const scanContainer = document.getElementById('scan-container');
+    const startScanBtn = document.getElementById('start-scan-btn');
+    const video = document.getElementById('scanner-video');
+    const canvasElement = document.getElementById('scanner-canvas');
+    const canvas = canvasElement.getContext('2d');
+    const webcamStatus = document.getElementById('webcam-status');
+    const scanImageUpload = document.getElementById('scan-image-upload');
+    const ocrImageUpload = document.getElementById('ocr-image-upload');
+    const ocrStatus = document.getElementById('ocr-status');
+    const websiteUrlInput = document.getElementById('website-url-input');
+    const websiteScanBtn = document.getElementById('website-scan-btn');
+    const websiteStatus = document.getElementById('website-status');
+    const resultContainer = document.getElementById('result-container');
+    const scanResult = document.getElementById('scan-result');
+    const vcardResult = document.getElementById('vcard-result');
+    const websiteResult = document.getElementById('website-result');
+
+    let qrCodeInstance = null;
+    let currentQrData = '';
+    let logoImage = null;
+    let videoStream = null;
+
+    // --- Theme Management ---
+    const lightFavicon = "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔳</text></svg>";
+    const darkFavicon = "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔲</text></svg>";
+
+    const applyTheme = (isDark) => {
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            favicon.href = darkFavicon;
+        } else {
+            document.body.classList.remove('dark-mode');
+            favicon.href = lightFavicon;
+        }
+        themeToggle.checked = isDark;
+    };
+
+    themeToggle.addEventListener('change', () => {
+        const isDark = themeToggle.checked;
+        localStorage.setItem('darkMode', isDark);
+        applyTheme(isDark);
+    });
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('darkMode') === 'true';
+    applyTheme(savedTheme);
+
+    // --- Main Tab Navigation ---
+    const switchMainTab = (tab) => {
+        if (tab === 'generate') {
+            tabGenerateBtn.classList.add('active');
+            tabScanBtn.classList.remove('active');
+            generatePanel.style.display = 'block';
+            scanPanel.style.display = 'none';
+            stopWebcam();
+        } else {
+            tabGenerateBtn.classList.remove('active');
+            tabScanBtn.classList.add('active');
+            generatePanel.style.display = 'none';
+            scanPanel.style.display = 'block';
+        }
+    };
+    tabGenerateBtn.addEventListener('click', () => switchMainTab('generate'));
+    tabScanBtn.addEventListener('click', () => switchMainTab('scan'));
+
+    // --- QR Generation Logic ---
+    let activeQrType = 'text';
+
+    qrTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            activeQrType = btn.dataset.type;
+            qrTypeBtns.forEach(b => b.classList.remove('bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-700', 'dark:text-indigo-300'));
+            btn.classList.add('bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-700', 'dark:text-indigo-300');
+            
+            for (const child of inputContainer.children) {
+                child.classList.add('hidden');
+            }
+            document.getElementById(`input-${activeQrType}`).classList.remove('hidden');
+        });
+    });
+
+    logoUpload.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                logoImage = new Image();
+                logoImage.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        } else {
+            logoImage = null;
+        }
+    });
+
+    const getQrData = () => {
+        switch (activeQrType) {
+            case 'text': return document.getElementById('text-input').value;
+            case 'url': return document.getElementById('url-input').value;
+            case 'wifi':
+                const ssid = document.getElementById('wifi-ssid').value;
+                const password = document.getElementById('wifi-password').value;
+                const encryption = document.getElementById('wifi-encryption').value;
+                return `WIFI:T:${encryption};S:${ssid};P:${password};;`;
+            case 'vcard':
+                const name = document.getElementById('vcard-name').value;
+                const email = document.getElementById('vcard-email').value;
+                const phone = document.getElementById('vcard-phone').value;
+                const website = document.getElementById('vcard-website').value;
+                return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nURL:${website}\nEND:VCARD`;
+            case 'email':
+                const address = document.getElementById('email-address').value;
+                const subject = document.getElementById('email-subject').value;
+                return `mailto:${address}?subject=${encodeURIComponent(subject)}`;
+            case 'phone': return `tel:${document.getElementById('phone-number').value}`;
+            default: return '';
+        }
+    };
+
+    const generateQrCode = () => {
+        currentQrData = getQrData();
+        if (!currentQrData) {
+            alert('Please fill in the required fields.');
+            return;
+        }
+
+        qrCodeContainer.innerHTML = '';
+        qrPlaceholder.style.display = 'none';
+
+        const qrColor = document.getElementById('qr-color').value;
+        const bgColor = document.getElementById('bg-color').value;
+
+        qrCodeInstance = new QRCode(qrCodeContainer, {
+            text: currentQrData,
+            width: 256,
+            height: 256,
+            colorDark: qrColor,
+            colorLight: bgColor,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        setTimeout(() => {
+            if (logoImage) {
+                const canvas = qrCodeContainer.querySelector('canvas');
+                const ctx = canvas.getContext('2d');
+                const logoSize = canvas.width * 0.25;
+                const logoX = (canvas.width - logoSize) / 2;
+                const logoY = (canvas.height - logoSize) / 2;
+                
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(logoX - 5, logoY - 5, logoSize + 10, logoSize + 10);
+                
+                ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+            }
+            downloadSection.classList.remove('hidden');
+            downloadSection.classList.add('fade-in');
+        }, 100);
+    };
+
+    generateBtn.addEventListener('click', generateQrCode);
+
+    // --- Download Logic ---
+    downloadPngBtn.addEventListener('click', () => {
+        const canvas = qrCodeContainer.querySelector('canvas');
+        if (!canvas) return;
+        const filename = filenameInput.value.trim() || 'qrcode';
+        const link = document.createElement('a');
+        link.download = `${filename}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+
+    downloadJpgBtn.addEventListener('click', () => {
+        const originalCanvas = qrCodeContainer.querySelector('canvas');
+        if (!originalCanvas) return;
+
+        const filename = filenameInput.value.trim() || 'qrcode';
+        const bgColor = document.getElementById('bg-color').value;
+
+        // Create a temporary canvas to draw the JPG with a background
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = originalCanvas.width;
+        tempCanvas.height = originalCanvas.height;
+
+        // Fill background
+        tempCtx.fillStyle = bgColor;
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Draw the QR code canvas on top
+        tempCtx.drawImage(originalCanvas, 0, 0);
+
+        // Trigger download
+        const link = document.createElement('a');
+        link.download = `${filename}.jpg`;
+        link.href = tempCanvas.toDataURL('image/jpeg', 0.9); // 0.9 is quality
+        link.click();
+    });
+
+    // --- Scanning Logic ---
+    scanTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const scanType = btn.dataset.scantype;
+            scanTypeBtns.forEach(b => b.classList.remove('bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-700', 'dark:text-indigo-300'));
+            btn.classList.add('bg-indigo-100', 'dark:bg-indigo-900', 'text-indigo-700', 'dark:text-indigo-300');
+            
+            for (const child of scanContainer.children) {
+                child.classList.add('hidden');
+            }
+            document.getElementById(`scan-${scanType}`).classList.remove('hidden');
+            
+            resultContainer.classList.add('hidden');
+            stopWebcam();
+        });
+    });
+
+    function tick() {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            webcamStatus.textContent = "Scanning...";
+            canvasElement.height = video.videoHeight;
+            canvasElement.width = video.videoWidth;
+            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+            const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+            if (code) {
+                stopWebcam();
+                webcamStatus.textContent = "QR Code Found!";
+                displayScanResult(code.data);
+            }
+        }
+        if (videoStream) {
+            requestAnimationFrame(tick);
+        }
+    }
+
+    const startWebcam = async () => {
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = videoStream;
+            video.setAttribute("playsinline", true);
+            video.play();
+            webcamStatus.textContent = "Starting camera...";
+            requestAnimationFrame(tick);
+            startScanBtn.textContent = "Stop Camera";
+        } catch (err) {
+            console.error("Error accessing webcam:", err);
+            webcamStatus.textContent = "Could not access camera. Check permissions.";
+        }
+    };
+
+    const stopWebcam = () => {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+            video.srcObject = null;
+            webcamStatus.textContent = "";
+            startScanBtn.textContent = "Start Camera";
+        }
+    };
+
+    startScanBtn.addEventListener('click', () => {
+        if (videoStream) {
+            stopWebcam();
+        } else {
+            startWebcam();
+        }
+    });
+
+    scanImageUpload.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    canvasElement.width = img.width;
+                    canvasElement.height = img.height;
+                    canvas.drawImage(img, 0, 0, img.width, img.height);
+                    const imageData = canvas.getImageData(0, 0, img.width, img.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    if (code) {
+                        displayScanResult(code.data);
+                    } else {
+                        displayScanResult("No QR code found in the image.");
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // --- OCR Logic ---
+    ocrImageUpload.addEventListener('change', async (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            ocrStatus.textContent = 'Initializing OCR engine...';
+            try {
+                const worker = await Tesseract.createWorker({
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                           ocrStatus.textContent = `Recognizing... ${Math.round(m.progress * 100)}%`;
+                        }
+                    },
+                });
+                await worker.loadLanguage('eng');
+                await worker.initialize('eng');
+                const { data: { text } } = await worker.recognize(file);
+                displayScanResult(text, 'ocr');
+                await worker.terminate();
+                ocrStatus.textContent = 'Recognition complete.';
+            } catch (error) {
+                console.error('OCR Error:', error);
+                ocrStatus.textContent = 'An error occurred during OCR.';
+                displayScanResult('Could not extract text from the image.', 'ocr');
+            }
+        }
+    });
+    
+    // --- Website Scanner Logic ---
+    websiteScanBtn.addEventListener('click', async () => {
+        const url = websiteUrlInput.value;
+        if (!url) {
+            alert('Please enter a valid URL.');
+            return;
+        }
+        websiteStatus.textContent = 'Fetching website data...';
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        
+        try {
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            const html = data.contents;
+            
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const title = doc.querySelector('title')?.innerText || 'No title found';
+            const description = doc.querySelector('meta[name="description"]')?.getAttribute('content') || 'No description found';
+            const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
+
+            displayScanResult({ title, description, ogImage, url }, 'website');
+            websiteStatus.textContent = 'Fetch complete.';
+        } catch (error) {
+            console.error('Website fetch error:', error);
+            websiteStatus.textContent = 'Failed to fetch website data.';
+            displayScanResult({ error: 'Could not fetch data. The website might be blocking requests.' }, 'website');
+        }
+    });
+
+    // --- Result Display ---
+    const displayScanResult = (data, type = 'qr') => {
+        resultContainer.classList.remove('hidden');
+        resultContainer.classList.add('fade-in');
+        
+        scanResult.classList.add('hidden');
+        vcardResult.classList.add('hidden');
+        websiteResult.classList.add('hidden');
+        
+        if (type === 'website') {
+            websiteResult.classList.remove('hidden');
+            websiteResult.innerHTML = `
+                ${data.ogImage ? `<img src="${data.ogImage}" alt="Website Preview" class="rounded-lg mb-4 max-w-full h-auto mx-auto">` : ''}
+                <h4 class="font-bold text-lg">${data.title || 'No Title'}</h4>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">${data.description || ''}</p>
+                <a href="${data.url}" target="_blank" rel="noopener noreferrer" class="text-indigo-500 hover:underline break-all">${data.url}</a>
+                ${data.error ? `<p class="text-red-500 mt-2">${data.error}</p>` : ''}
+            `;
+        } else if (typeof data === 'string' && data.startsWith('BEGIN:VCARD')) {
+            vcardResult.classList.remove('hidden');
+            const parsed = parseVCard(data);
+            vcardResult.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="bg-slate-200 dark:bg-slate-700 rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">
+                        ${parsed.FN ? parsed.FN[0].toUpperCase() : '?'}
+                    </div>
+                    <div>
+                        <p class="font-bold text-lg">${parsed.FN || 'N/A'}</p>
+                        <p class="text-sm text-slate-500">${parsed.TITLE || ''}</p>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    ${parsed.TEL ? `<div><i class="fa-solid fa-phone w-6 text-slate-400"></i><span>${parsed.TEL}</span></div>` : ''}
+                    ${parsed.EMAIL ? `<div><i class="fa-solid fa-envelope w-6 text-slate-400"></i><span>${parsed.EMAIL}</span></div>` : ''}
+                    ${parsed.URL ? `<div><i class="fa-solid fa-globe w-6 text-slate-400"></i><a href="${parsed.URL}" target="_blank" class="text-indigo-500 hover:underline">${parsed.URL}</a></div>` : ''}
+                    ${parsed.ADR ? `<div><i class="fa-solid fa-location-dot w-6 text-slate-400"></i><span>${parsed.ADR.replace(/;/g, ', ')}</span></div>` : ''}
+                </div>
+            `;
+        } else {
+            scanResult.classList.remove('hidden');
+            scanResult.textContent = data;
+        }
+    };
+
+    const parseVCard = (vcardString) => {
+        const lines = vcardString.split('\n');
+        const vcard = {};
+        lines.forEach(line => {
+            if (line.includes(':')) {
+                let [key, ...valueParts] = line.split(':');
+                let value = valueParts.join(':');
+                key = key.split(';')[0];
+                vcard[key] = value.trim();
+            }
+        });
+        return vcard;
+    };
+});
+</script>
+
+</body>
+</html>
